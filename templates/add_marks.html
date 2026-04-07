@@ -1,0 +1,139 @@
+{% extends "base.html" %} {% block content %}
+<div class="card" style="max-width: 1000px; margin: 0 auto">
+  <div class="card-header">
+    <h3><i class="fas fa-plus-circle"></i> Add Marks - Multiple Subjects</h3>
+    <p>
+      Select Student and Semester, then enter marks for all subjects at once.
+    </p>
+  </div>
+
+  <form method="POST" action="{{ url_for('add_marks') }}" id="marksForm">
+    <!-- Student and Exam Details -->
+    <div
+      style="
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        background: var(--light-gray);
+        padding: 1.5rem;
+        border-radius: 8px;
+      "
+    >
+      <div class="form-group">
+        <label><strong>Select Student</strong></label>
+        <select name="student_id" id="student_id" class="form-control" required>
+          <option value="">-- Choose Student --</option>
+          {% for s in students %}
+          <option value="{{ s.student_id }}">
+            {{ s.seat_number }} - {{ s.full_name }} ({{ s.class }})
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><strong>Exam Term</strong></label>
+        <select name="exam_term" class="form-control" required>
+          <option value="Semester 1">Semester 1</option>
+          <option value="Semester 2">Semester 2</option>
+          <option value="Semester 3">Semester 3</option>
+          <option value="Semester 4">Semester 4</option>
+          <option value="Semester 5">Semester 5</option>
+          <option value="Semester 6">Semester 6</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><strong>Exam Year</strong></label>
+        <input
+          type="number"
+          name="exam_year"
+          class="form-control"
+          value="2026"
+          min="2000"
+          max="2030"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Subjects Table -->
+    <h4 style="margin-bottom: 1rem">📚 Enter Marks for Each Subject</h4>
+    <div class="table-container">
+      <table class="table" id="subjects-table">
+        <thead>
+          <tr>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+            <th>Max Marks</th>
+            <th>Pass Marks</th>
+            <th>Marks Obtained (0-100)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sub in subjects %}
+          <tr>
+            <td>{{ sub.subject_code }}</td>
+            <td>{{ sub.subject_name }}</td>
+            <td>{{ sub.max_marks }}</td>
+            <td>{{ sub.pass_marks }}</td>
+            <td>
+              <input
+                type="hidden"
+                name="subject_id[]"
+                value="{{ sub.subject_id }}"
+              />
+              <input
+                type="number"
+                name="marks_obtained[]"
+                class="form-control marks-input"
+                min="0"
+                max="100"
+                step="0.01"
+                placeholder="Enter marks"
+                required
+              />
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="text-align: center; margin-top: 2rem">
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="fas fa-save"></i> Save All Marks
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".marks-input").forEach((input) => {
+      input.addEventListener("focus", function () {
+        this.closest("tr").style.backgroundColor = "var(--light-blue)";
+      });
+      input.addEventListener("blur", function () {
+        this.closest("tr").style.backgroundColor = "";
+      });
+    });
+  });
+</script>
+
+<style>
+  .marks-input {
+    width: 120px;
+    text-align: center;
+  }
+  #subjects-table th {
+    background-color: var(--primary-blue);
+    color: white;
+  }
+  #subjects-table tr:hover {
+    background-color: var(--light-gray);
+  }
+</style>
+{% endblock %}

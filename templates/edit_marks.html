@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block content %}
+<div class="form-container" style="max-width: 600px">
+  <h2
+    style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem"
+  >
+    <i class="fas fa-edit"></i> Edit Marks
+  </h2>
+
+  <div
+    style="
+      background: var(--light-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    "
+  >
+    <p>
+      <strong>Student:</strong> {{ result.student_name }} ({{ result.seat_number
+      }})
+    </p>
+    <p>
+      <strong>Subject:</strong> {{ result.subject_name }} ({{
+      result.subject_code }})
+    </p>
+    <p><strong>Max Marks:</strong> {{ result.max_marks }}</p>
+    <p>
+      <strong>Current Grade:</strong>
+      <span class="badge grade-{{ result.grade|lower|replace('+','-plus') }}"
+        >{{ result.grade }}</span
+      >
+    </p>
+    <p>
+      <strong>Current Status:</strong>
+      <span
+        class="badge badge-{{ 'success' if result.status == 'PASS' else 'danger' }}"
+        >{{ result.status }}</span
+      >
+    </p>
+  </div>
+
+  <form method="POST">
+    <div class="form-group">
+      <label>Marks Obtained</label>
+      <input
+        type="number"
+        name="marks_obtained"
+        class="form-control"
+        value="{{ result.marks_obtained }}"
+        min="0"
+        max="100"
+        step="0.01"
+        required
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">
+      Update Marks
+    </button>
+  </form>
+
+  <div style="text-align: center; margin-top: 1rem">
+    <a href="{{ url_for('teacher_dashboard') }}">Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}

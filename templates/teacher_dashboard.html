@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h3>
+    <p>
+      Welcome, {{ teacher.full_name }} (Employee ID: {{ teacher.employee_id }})
+    </p>
+  </div>
+
+  <div style="margin: 2rem 0">
+    <a href="{{ url_for('add_marks') }}" class="btn btn-primary"
+      ><i class="fas fa-plus"></i> Add New Marks</a
+    >
+    <a href="{{ url_for('analytics') }}" class="btn btn-outline"
+      ><i class="fas fa-chart-bar"></i> View Analytics</a
+    >
+  </div>
+
+  <h3>Student Records</h3>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Seat No.</th>
+          <th>Student Name</th>
+          <th>Class</th>
+          <th>Percentage</th>
+          <th>Grade</th>
+          <th>Result</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ s.seat_number }}</td>
+          <td>{{ s.student_name }}</td>
+          <td>{{ s.class }}</td>
+          <td>
+            {% if s.total_marks %} {{ "%.2f"|format(s.total_marks / s.total_max
+            * 100) }}% {% else %} N/A {% endif %}
+          </td>
+          <td>
+            {% if s.total_marks %} {% set p = s.total_marks / s.total_max * 100
+            %} {% if p >= 90 %}A+ {% elif p >= 80 %}A {% elif p >= 70 %}B+ {%
+            elif p >= 60 %}B {% elif p >= 50 %}C+ {% elif p >= 35 %}C {% else
+            %}F {% endif %} {% else %} - {% endif %}
+          </td>
+          <td>
+            {% if s.passed_count == s.subject_count and s.subject_count > 0 %}
+            <span class="badge badge-success">PASS</span>
+            {% elif s.subject_count > 0 %}
+            <span class="badge badge-danger">FAIL</span>
+            {% else %}
+            <span class="badge badge-warning">No Results</span>
+            {% endif %}
+          </td>
+          <td>
+            <a
+              href="{{ url_for('add_marks') }}?student_id={{ s.student_id }}"
+              class="btn btn-sm btn-primary"
+              >Add Marks</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-chart-bar"></i> Performance Analytics</h3>
+  </div>
+
+  <!-- Overall Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h4>Total Students</h4>
+      <div class="stat-value">{{ overall.total_students or 0 }}</div>
+    </div>
+    <div class="stat-card">
+      <h4>Passed Students</h4>
+      <div class="stat-value">{{ overall.passed_students or 0 }}</div>
+    </div>
+    <div class="stat-card">
+      <h4>Failed Students</h4>
+      <div class="stat-value">{{ overall.failed_students or 0 }}</div>
+    </div>
+    <div class="stat-card">
+      <h4>Class Average</h4>
+      <div class="stat-value">
+        {{ "%.2f"|format(overall.overall_average or 0) }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Pass/Fail Chart -->
+  <div class="chart-container">
+    <h4>Pass/Fail Distribution</h4>
+    {% set total = overall.total_students or 1 %} {% set pass_percent =
+    (overall.passed_students or 0) / total * 100 %} {% set fail_percent =
+    (overall.failed_students or 0) / total * 100 %}
+    <div class="pass-fail-wrapper">
+      <div class="pass-bar" style="width: {{ pass_percent }}%;">
+        {{ "%.1f"|format(pass_percent) }}% Pass
+      </div>
+      <div class="fail-bar" style="width: {{ fail_percent }}%;">
+        {{ "%.1f"|format(fail_percent) }}% Fail
+      </div>
+    </div>
+  </div>
+
+  <!-- Grade Distribution -->
+  <h4>Grade Distribution</h4>
+  <div class="grade-grid">
+    {% for g in grade_dist %}
+    <div class="grade-item">
+      <strong>{{ g.grade }}</strong>
+      <span>{{ g.count }} students</span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Subject-wise Performance -->
+  <h4>Subject-wise Performance</h4>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Subject Code</th>
+          <th>Subject Name</th>
+          <th>Appeared</th>
+          <th>Average</th>
+          <th>Highest</th>
+          <th>Lowest</th>
+          <th>Pass %</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sub in subject_performance %}
+        <tr>
+          <td>{{ sub.subject_code }}</td>
+          <td>{{ sub.subject_name }}</td>
+          <td>{{ sub.total_appeared or 0 }}</td>
+          <td>{{ "%.2f"|format(sub.avg_marks or 0) }}</td>
+          <td>{{ sub.highest_marks or 0 }}</td>
+          <td>{{ sub.lowest_marks or 0 }}</td>
+          <td>
+            {% if sub.total_appeared %} {{ "%.1f"|format((sub.passed_count or 0)
+            / sub.total_appeared * 100) }}% {% else %} N/A {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Class-wise Performance -->
+  <h4>Class-wise Performance</h4>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Class</th>
+          <th>Students</th>
+          <th>Results</th>
+          <th>Class Average</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cls in class_performance %}
+        <tr>
+          <td>{{ cls.class or 'N/A' }}</td>
+          <td>{{ cls.student_count or 0 }}</td>
+          <td>{{ cls.result_count or 0 }}</td>
+          <td>{{ "%.2f"|format(cls.class_average or 0) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

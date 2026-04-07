@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block content %}
+<div class="form-container" style="max-width: 600px">
+  <h2
+    style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem"
+  >
+    <i class="fas fa-user-plus"></i> Student Registration
+  </h2>
+
+  <form action="{{ url_for('register') }}" method="POST">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" name="username" class="form-control" required />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" class="form-control" required />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" name="password" class="form-control" required />
+    </div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" name="full_name" class="form-control" required />
+    </div>
+    <div class="form-group">
+      <label>Seat Number</label>
+      <input type="text" name="seat_number" class="form-control" required />
+    </div>
+    <div class="form-group">
+      <label>Roll Number (optional)</label>
+      <input type="text" name="roll_number" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label>Class (optional)</label>
+      <input
+        type="text"
+        name="class"
+        class="form-control"
+        placeholder="e.g., B.Sc IT Sem6"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Register</button>
+  </form>
+
+  <p style="text-align: center; margin-top: 1rem">
+    Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+  </p>
+</div>
+{% endblock %}

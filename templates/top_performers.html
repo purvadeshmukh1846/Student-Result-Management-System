@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-trophy"></i> Top Performers</h3>
+    <p>Students with highest academic performance</p>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Seat No.</th>
+        <th>Student Name</th>
+        <th>Total Marks</th>
+        <th>Percentage</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in performers %}
+      <tr>
+        <td>
+          {% if loop.index == 1 %}
+          <span style="color: gold; font-weight: bold"
+            ><i class="fas fa-crown"></i> #1</span
+          >
+          {% elif loop.index == 2 %}
+          <span style="color: silver; font-weight: bold"
+            ><i class="fas fa-medal"></i> #2</span
+          >
+          {% elif loop.index == 3 %}
+          <span style="color: #cd7f32; font-weight: bold"
+            ><i class="fas fa-medal"></i> #3</span
+          >
+          {% else %} #{{ loop.index }} {% endif %}
+        </td>
+        <td>{{ p.seat_number }}</td>
+        <td>{{ p.student_name }}</td>
+        <td>{{ p.total_marks }}/{{ p.total_max }}</td>
+        <td>{{ p.percentage }}%</td>
+        <td>
+          <span class="badge grade-{{ p.grade|lower|replace('+','-plus') }}"
+            >{{ p.grade }}</span
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-chalkboard-teacher"></i> Faculty Members</h3>
+  </div>
+  <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    "
+  >
+    {% for f in faculty %}
+    <div
+      style="background: var(--light-gray); padding: 1rem; border-radius: 8px"
+    >
+      <strong>{{ f.full_name }}</strong><br />
+      {{ f.email }}<br />
+      <small>Department: {{ f.department or 'Information Technology' }}</small
+      ><br />
+      <small
+        >{{ f.qualification or '' }} {{ f.experience or 0 }} years exp.</small
+      >
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

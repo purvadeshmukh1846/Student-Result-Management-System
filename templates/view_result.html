@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% block content %}
+<div class="result-card">
+  <div class="result-header">
+    <h2>G. M. VEDAK COLLEGE OF SCIENCE</h2>
+    <p>(Affiliated to University of Mumbai)</p>
+    <h3>Statement of Marks</h3>
+  </div>
+
+  <div class="student-info-card">
+    <div class="info-group">
+      <span class="info-label">Seat Number</span
+      ><span class="info-value">{{ student.seat_number }}</span>
+    </div>
+    <div class="info-group">
+      <span class="info-label">Roll Number</span
+      ><span class="info-value">{{ student.roll_number }}</span>
+    </div>
+    <div class="info-group">
+      <span class="info-label">Class</span
+      ><span class="info-value">{{ student.class }} {{ student.section }}</span>
+    </div>
+    <div class="info-group">
+      <span class="info-label">Student Name</span
+      ><span class="info-value">{{ student.full_name }}</span>
+    </div>
+    <div class="info-group">
+      <span class="info-label">Father's Name</span
+      ><span class="info-value">{{ student.father_name or 'N/A' }}</span>
+    </div>
+    <div class="info-group">
+      <span class="info-label">Academic Year</span
+      ><span class="info-value"
+        >{{ student.academic_year or '2025-2026' }}</span
+      >
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Subject Code</th>
+        <th>Subject Name</th>
+        <th>Max Marks</th>
+        <th>Marks Obtained</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>{{ r.subject_code }}</td>
+        <td>{{ r.subject_name }}</td>
+        <td>{{ r.max_marks }}</td>
+        <td>{{ r.marks_obtained }}</td>
+        <td>
+          <span class="badge grade-{{ r.grade|lower|replace('+','-plus') }}"
+            >{{ r.grade }}</span
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2"><strong>TOTAL</strong></td>
+        <td><strong>{{ total_max }}</strong></td>
+        <td><strong>{{ total_marks }}</strong></td>
+        <td><strong>{{ "%.2f"|format(percentage) }}%</strong></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div style="text-align: center; margin-top: 2rem">
+    <a
+      href="{{ url_for('download_result', seat_number=student.seat_number) }}"
+      class="btn btn-primary"
+    >
+      <i class="fas fa-download"></i> Download PDF
+    </a>
+    <button onclick="window.print()" class="btn btn-outline">
+      <i class="fas fa-print"></i> Print
+    </button>
+  </div>
+</div>
+{% endblock %}

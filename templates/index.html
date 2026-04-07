@@ -1,0 +1,147 @@
+{% extends "base.html" %} {% block content %}
+<div class="hero">
+  <h1>Student Result Management System</h1>
+  <p class="hero-description">
+    A comprehensive web-based platform for managing academic results
+    efficiently. Streamline result processing, enhance transparency, and provide
+    instant access to academic performance.
+  </p>
+
+  <div class="hero-buttons">
+    <a href="{{ url_for('login') }}" class="btn btn-primary btn-large"
+      >Get Started</a
+    >
+    <a href="#check-result" class="btn btn-primary btn-large">Check Results</a>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <h4>Students Enrolled</h4>
+    <div class="stat-value">500+</div>
+    <div class="stat-label">Active Students</div>
+  </div>
+  <div class="stat-card">
+    <h4>Success Rate</h4>
+    <div class="stat-value">95%</div>
+    <div class="stat-label">Passing Percentage</div>
+  </div>
+  <div class="stat-card">
+    <h4>Result Access</h4>
+    <div class="stat-value">24/7</div>
+    <div class="stat-label">Instant Results</div>
+  </div>
+</div>
+
+<div class="features-grid">
+  <div class="feature-card">
+    <i class="fas fa-search"></i>
+    <h4>Easy Result Access</h4>
+    <p>
+      Students can view their results online instantly by entering their seat
+      number and credentials.
+    </p>
+  </div>
+  <div class="feature-card">
+    <i class="fas fa-chart-line"></i>
+    <h4>Performance Analytics</h4>
+    <p>
+      Comprehensive dashboards showing pass/fail statistics and subject-wise
+      performance trends.
+    </p>
+  </div>
+  <div class="feature-card">
+    <i class="fas fa-shield-alt"></i>
+    <h4>Secure & Reliable</h4>
+    <p>
+      Role-based authentication ensures data security and privacy for all users.
+    </p>
+  </div>
+  <div class="feature-card">
+    <i class="fas fa-users"></i>
+    <h4>Multi-User Support</h4>
+    <p>
+      Separate portals for students, teachers, and administrators with tailored
+      functionalities.
+    </p>
+  </div>
+  <div class="feature-card">
+    <i class="fas fa-sync-alt"></i>
+    <h4>Real-time Updates</h4>
+    <p>
+      Teachers can update marks instantly, and results are reflected immediately
+      for students.
+    </p>
+  </div>
+  <div class="feature-card">
+    <i class="fas fa-file-pdf"></i>
+    <h4>Professional Reports</h4>
+    <p>
+      Generate official mark sheets in professional format, similar to board
+      exam results.
+    </p>
+  </div>
+</div>
+
+<h2 class="section-title">How It Works</h2>
+<div class="steps">
+  <div class="step">
+    <div class="step-number">1</div>
+    <h4>Select Login Type</h4>
+    <p>Choose your role - Student, Teacher, or Admin</p>
+  </div>
+  <div class="step">
+    <div class="step-number">2</div>
+    <h4>Enter Credentials</h4>
+    <p>Provide your login details</p>
+  </div>
+  <div class="step">
+    <div class="step-number">3</div>
+    <h4>Access Dashboard</h4>
+    <p>View your results or manage student performance</p>
+  </div>
+  <div class="step">
+    <div class="step-number">4</div>
+    <h4>Download Reports</h4>
+    <p>Generate and download professional mark sheets</p>
+  </div>
+</div>
+
+<div id="check-result" class="card check-result-card">
+  <div class="card-header">
+    <h3><i class="fas fa-search"></i> Check Your Result</h3>
+  </div>
+  <form action="{{ url_for('check_result') }}" method="POST">
+    <div class="form-group">
+      <label for="seat_number">Seat Number</label>
+      <input
+        type="text"
+        class="form-control"
+        id="seat_number"
+        name="seat_number"
+        placeholder="Enter your seat number"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-warning btn-block">View Result</button>
+  </form>
+</div>
+
+<div class="login-options">
+  <a href="{{ url_for('login') }}?role=student" class="login-option">
+    <i class="fas fa-user-graduate"></i>
+    <h3>Student</h3>
+    <p>View your results and academic performance</p>
+  </a>
+  <a href="{{ url_for('login') }}?role=teacher" class="login-option">
+    <i class="fas fa-chalkboard-teacher"></i>
+    <h3>Teacher</h3>
+    <p>Manage student records and marks</p>
+  </a>
+  <a href="{{ url_for('login') }}?role=admin" class="login-option">
+    <i class="fas fa-user-tie"></i>
+    <h3>Admin</h3>
+    <p>System management and analytics</p>
+  </a>
+</div>
+{% endblock %}

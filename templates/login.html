@@ -1,0 +1,196 @@
+{% extends "base.html" %} {% block content %}
+<div class="form-container" style="max-width: 500px">
+  <h2
+    style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem"
+  >
+    <i class="fas fa-sign-in-alt"></i> Login
+  </h2>
+
+  <div
+    style="
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    "
+  >
+    <button
+      type="button"
+      class="btn btn-outline"
+      onclick="showRole('student')"
+      id="btn-student"
+    >
+      Student
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline"
+      onclick="showRole('teacher')"
+      id="btn-teacher"
+    >
+      Teacher
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline"
+      onclick="showRole('admin')"
+      id="btn-admin"
+    >
+      Admin
+    </button>
+  </div>
+
+  <!-- Student Login -->
+  <form
+    id="student-form"
+    action="{{ url_for('login') }}"
+    method="POST"
+    style="display: none"
+  >
+    <input type="hidden" name="role" value="student" />
+    <div class="form-group">
+      <label>Seat Number</label>
+      <input
+        type="text"
+        class="form-control"
+        name="seat_number"
+        placeholder="Enter your seat number"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input
+        type="text"
+        class="form-control"
+        name="full_name"
+        placeholder="Enter your full name"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        class="form-control"
+        name="password"
+        placeholder="Enter your password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">
+      Login as Student
+    </button>
+    <p style="text-align: center; margin-top: 1rem">
+      Don't have account? <a href="{{ url_for('register') }}">Register here</a>
+    </p>
+  </form>
+
+  <!-- Teacher Login -->
+  <form
+    id="teacher-form"
+    action="{{ url_for('login') }}"
+    method="POST"
+    style="display: none"
+  >
+    <input type="hidden" name="role" value="teacher" />
+    <div class="form-group">
+      <label>Employee ID</label>
+      <input
+        type="text"
+        class="form-control"
+        name="employee_id"
+        placeholder="Enter your employee ID"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        class="form-control"
+        name="password"
+        placeholder="Enter your password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">
+      Login as Teacher
+    </button>
+  </form>
+
+  <!-- Admin Login -->
+  <form
+    id="admin-form"
+    action="{{ url_for('login') }}"
+    method="POST"
+    style="display: none"
+  >
+    <input type="hidden" name="role" value="admin" />
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        class="form-control"
+        name="email"
+        placeholder="Enter admin email"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        type="password"
+        class="form-control"
+        name="password"
+        placeholder="Enter admin password"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">
+      Login as Admin
+    </button>
+  </form>
+
+  <div style="text-align: center; margin-top: 1.5rem">
+    <a href="{{ url_for('forgot_password') }}">Forgot Password?</a>
+  </div>
+  <div style="text-align: center; margin-top: 1rem">
+    <a href="{{ url_for('index') }}">Back to Home</a>
+  </div>
+</div>
+
+<script>
+  function showRole(role) {
+    document.getElementById("student-form").style.display = "none";
+    document.getElementById("teacher-form").style.display = "none";
+    document.getElementById("admin-form").style.display = "none";
+    document.getElementById("btn-student").classList.remove("btn-primary");
+    document.getElementById("btn-teacher").classList.remove("btn-primary");
+    document.getElementById("btn-admin").classList.remove("btn-primary");
+    document.getElementById("btn-student").classList.add("btn-outline");
+    document.getElementById("btn-teacher").classList.add("btn-outline");
+    document.getElementById("btn-admin").classList.add("btn-outline");
+
+    if (role === "student") {
+      document.getElementById("student-form").style.display = "block";
+      document.getElementById("btn-student").classList.remove("btn-outline");
+      document.getElementById("btn-student").classList.add("btn-primary");
+    } else if (role === "teacher") {
+      document.getElementById("teacher-form").style.display = "block";
+      document.getElementById("btn-teacher").classList.remove("btn-outline");
+      document.getElementById("btn-teacher").classList.add("btn-primary");
+    } else if (role === "admin") {
+      document.getElementById("admin-form").style.display = "block";
+      document.getElementById("btn-admin").classList.remove("btn-outline");
+      document.getElementById("btn-admin").classList.add("btn-primary");
+    }
+  }
+  window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get("role");
+    if (role) showRole(role);
+    else showRole("student");
+  };
+</script>
+{% endblock %}

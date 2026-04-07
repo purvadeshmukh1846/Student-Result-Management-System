@@ -1,0 +1,139 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3><i class="fas fa-user-tie"></i> Admin Dashboard</h3>
+    <p>
+      Welcome, {{ session.full_name }}! Overview of academic performance and
+      system analytics.
+    </p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h4>Total Students</h4>
+      <div class="stat-value">{{ total_students }}</div>
+    </div>
+    <div class="stat-card">
+      <h4>Total Teachers</h4>
+      <div class="stat-value">{{ total_teachers }}</div>
+    </div>
+    <div class="stat-card">
+      <h4>Total Users</h4>
+      <div class="stat-value">{{ total_users }}</div>
+    </div>
+  </div>
+
+  <!-- Pass/Fail Rate -->
+  <div
+    style="display: flex; gap: 2rem; justify-content: center; margin: 2rem 0"
+  >
+    <div style="text-align: center">
+      <span style="font-size: 2.5rem; color: var(--success)">
+        {{ "%.2f"|format((stats.passed_students or 0) / total_students * 100) if
+        total_students else 0 }}%
+      </span>
+      <br />
+      <span>Pass Rate</span>
+    </div>
+    <div style="width: 2px; background: #ccc"></div>
+    <div style="text-align: center">
+      <span style="font-size: 2.5rem; color: var(--danger)">
+        {{ "%.2f"|format((stats.failed_students or 0) / total_students * 100) if
+        total_students else 0 }}%
+      </span>
+      <br />
+      <span>Fail Rate</span>
+    </div>
+  </div>
+
+  <!-- Grade Distribution -->
+  <h3>Grade Distribution</h3>
+  <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+    "
+    id="grade-distribution"
+  >
+    {% for g in grade_distribution %}
+    <div style="text-align: center">
+      <strong>{{ g.grade }}</strong> : {{ g.count }} students
+      <div
+        style="
+          height: 10px;
+          background: #eee;
+          border-radius: 5px;
+          overflow: hidden;
+          margin-top: 0.5rem;
+        "
+      >
+        <div
+          class="progress-bar-fill"
+          data-width="{{ (g.count / total_students * 100) if total_students else 0 }}"
+          style="
+            height: 100%;
+            width: 0%;
+            background: var(--primary-blue);
+            transition: width 0.5s;
+          "
+        ></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Add Teacher Button -->
+  <div style="margin: 2rem 0">
+    <a href="{{ url_for('add_teacher') }}" class="btn btn-primary">
+      <i class="fas fa-user-plus"></i> Add New Teacher
+    </a>
+    <a href="{{ url_for('analytics') }}" class="btn btn-outline">
+      <i class="fas fa-chart-bar"></i> View Analytics
+    </a>
+  </div>
+
+  <!-- Recent Users Table -->
+  <h3>Recent Users</h3>
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Full Name</th>
+          <th>Registered</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in recent_users %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.role }}</td>
+          <td>{{ u.full_name }}</td>
+          <td>
+            {{ u.created_at.strftime('%Y-%m-%d') if u.created_at else 'N/A' }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".progress-bar-fill").forEach(function (el) {
+      var width = el.getAttribute("data-width");
+      if (width) {
+        setTimeout(function () {
+          el.style.width = width + "%";
+        }, 100);
+      }
+    });
+  });
+</script>
+{% endblock %}
